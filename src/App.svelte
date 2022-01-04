@@ -23,29 +23,6 @@
     const client = createApolloClient();
     setClient(client);
 
-/*
-    const wsLink = new WebSocketLink({
-        uri: "wss://hasura.io/learn/graphql",
-        options: {
-            reconnect: true,
-            connectionParams: {
-                headers,
-            },
-        },
-    });
-    const link = split(
-        ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-                definition.kind === "OperationDefinition" &&
-                definition.operation === "subscription"
-            );
-        },
-        wsLink,
-        httpLink
-    );
-*/
-
     const storage = subscribe(query.getSub);
 
     const insertStorage = async () => {
