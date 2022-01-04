@@ -5,6 +5,7 @@
     import { setClient, subscribe } from "svelte-apollo";
     import { WebSocketLink } from "@apollo/client/link/ws";
 
+
     function createApolloClient() {
         const wsLink = new WebSocketLink({
             uri: "wss://web3-app3.herokuapp.com/v1/graphql",
