@@ -28,7 +28,7 @@ class requester {
 
         if (errors) {
             // handle those errors like a pro
-            console.error(errors);
+            throw new Error(errors[0].message);
         }
 
         // do something great with this precious data
@@ -48,7 +48,7 @@ class requester {
 
         if (errors) {
             // handle those errors like a pro
-            console.error(errors);
+            throw new Error(errors[0].message);
         }
 
         // do something great with this precious data

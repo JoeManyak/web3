@@ -1,10 +1,28 @@
 <script>
     import requester from "./utility/graphql-requester";
     import {query} from "./utility/queries";
-    import { ApolloClient, InMemoryCache} from '@apollo/client';
-    import { setClient, subscribe } from "svelte-apollo";
-    import { WebSocketLink } from "@apollo/client/link/ws";
-    console.log("CHECK THIS: "+HEROKU_URL)
+    import {ApolloClient, InMemoryCache} from '@apollo/client';
+    import {setClient, subscribe} from "svelte-apollo";
+    import {WebSocketLink} from "@apollo/client/link/ws";
+
+    console.log("CHECK THIS: " + HEROKU_URL)
+
+    let name = ''
+    let weight = ''
+    let volume = ''
+
+    let maxVolume = ''
+
+    function clearAddInputs() {
+        name = ''
+        weight = ''
+        volume = ''
+    }
+
+    function clearDeleteInputs() {
+        maxVolume = ''
+    }
+
     function createApolloClient() {
         const wsLink = new WebSocketLink({
             uri: HEROKU_URL,
@@ -26,21 +44,19 @@
     const storage = subscribe(query.getSub);
 
     const insertStorage = async () => {
-        const name = prompt("Enter storage unit name:")
-        const weight = prompt("Enter weight of storage unit in kg:")
-        const volume = prompt("Enter volume of storage unit in m3:")
-        if (!name||!weight||!volume){
+        if (!name || !weight || !volume) {
             return
         }
         await requester.startExecuteMyMutation(query.Insert(name, weight, volume))
+        clearAddInputs()
     }
 
     const deleteByVolume = async () => {
-        const volume = prompt("Enter max volume in storage:")
-        if (!volume){
+        if (!maxVolume) {
             return
         }
-        await requester.startExecuteMyMutation(query.DeleteBiggerThen(volume))
+        await requester.startExecuteMyMutation(query.DeleteBiggerThen(maxVolume))
+        clearDeleteInputs()
     }
 
 </script>
@@ -53,7 +69,12 @@
     {:else if $storage.data}
         <div>
             <button on:click={insertStorage}>Create new unit</button>
+            <input placeholder="name" bind:value={name}>
+            <input placeholder="weight_kg" bind:value={weight}>
+            <input placeholder="volume_m3" bind:value={volume}>
+            <br>
             <button on:click={deleteByVolume}>Delete unit</button>
+            <input placeholder="max volume" bind:value={maxVolume}>
             <table class="main-table">
                 <caption>Storage</caption>
                 <tr>
@@ -61,13 +82,17 @@
                     <th>Weight kg</th>
                     <th>Volume m3</th>
                 </tr>
-            {#each $storage.data.web3_strogate as sd (sd.id)}
-                <tr>
-                    <td>{sd.name}</td>
-                    <td>{sd.weight_kg}</td>
-                    <td>{sd.volume_m3}</td>
-                </tr>
-            {/each}
+                {#if $storage.data.web3_strogate.length === 0}
+                    <div>Empty database!</div>
+                {:else}
+                    {#each $storage.data.web3_strogate as sd (sd.id)}
+                        <tr>
+                            <td>{sd.name}</td>
+                            <td>{sd.weight_kg}</td>
+                            <td>{sd.volume_m3}</td>
+                        </tr>
+                    {/each}
+                {/if}
             </table>
         </div>
     {/if}
@@ -79,9 +104,11 @@
         border: 1px #000838 solid;
         background-color: #c3caff;
     }
+
     table {
         width: 100%;
     }
+
     caption {
         font-size: 35px;
         margin-bottom: 20px;
