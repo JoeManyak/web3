@@ -4,11 +4,10 @@
     import { ApolloClient, InMemoryCache} from '@apollo/client';
     import { setClient, subscribe } from "svelte-apollo";
     import { WebSocketLink } from "@apollo/client/link/ws";
-
-
+    console.log("CHECK THIS: "+HEROKU_URL)
     function createApolloClient() {
         const wsLink = new WebSocketLink({
-            uri: "wss://web3-app3.herokuapp.com/v1/graphql",
+            uri: HEROKU_URL,
             options: {
                 reconnect: true,
             }
