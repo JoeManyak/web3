@@ -14,9 +14,7 @@
     let maxVolume = ''
 
     function clearAddInputs() {
-        name = ''
-        weight = ''
-        volume = ''
+        name = weight = volume = ''
     }
 
     function clearDeleteInputs() {
@@ -82,7 +80,7 @@
                     <th>Weight kg</th>
                     <th>Volume m3</th>
                 </tr>
-                {#if $storage.data.web3_strogate.length === 0}
+                {#if !$storage.data?.web3_strogate?.length}
                     <div>Empty database!</div>
                 {:else}
                     {#each $storage.data.web3_strogate as sd (sd.id)}

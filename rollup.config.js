@@ -39,7 +39,8 @@ export default {
 	},
 	plugins: [
 		replace({
-			HEROKU_URL: JSON.stringify(process.env.HEROKU_URL)
+			HEROKU_URL: JSON.stringify(process.env.HEROKU_URL),
+			HEROKU_HTTP: JSON.stringify(process.env.HEROKU_HTTP)
 		}),
 		svelte({
 			compilerOptions: {

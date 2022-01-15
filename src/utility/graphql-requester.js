@@ -1,8 +1,7 @@
 class requester {
-    URL = "https://web3-app3.herokuapp.com/v1/graphql"
     async fetchGraphQL(operationsDoc, operationName, variables) {
         const result = await fetch(
-            this.URL,
+            HEROKU_HTTP,
             {
                 method: "POST",
                 body: JSON.stringify({
